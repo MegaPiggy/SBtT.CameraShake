@@ -1,0 +1,9 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ow-mods/owml/master/schemas/manifest_schema.json",
+  "filename": "CameraShake.dll",
+  "author": "Streetlights Behind the Trees",
+  "name": "Camera Shake",
+  "uniqueName": "SBtT.CameraShake",
+  "version": "1.0.0",
+  "owmlVersion": "2.9.0"
+}

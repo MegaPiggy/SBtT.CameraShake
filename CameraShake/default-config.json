@@ -1,0 +1,56 @@
+{
+    "$schema": "https://raw.githubusercontent.com/ow-mods/owml/master/schemas/config_schema.json",
+	"enabled": true,
+    "settings": {
+
+        "Master Multiplier": {
+            "type": "slider",
+            "min": 0,
+            "max": 1,
+            "value": 1
+        },
+        "v Halfway is Default v": {
+            "type": "separator"
+        },
+        "Explosions": {
+            "type": "slider",
+            "min": 0,
+            "max": 2,
+            "value": 1
+        },
+        "Environment": {
+            "type": "slider",
+            "min": 0,
+            "max": 2,
+            "value": 1
+        },
+        "Ship": {
+            "type": "slider",
+            "min": 0,
+            "max": 2,
+            "value": 1
+        },
+        "Player": {
+            "type": "slider",
+            "min": 0,
+            "max": 2,
+            "value": 1
+        },
+        "Scout": {
+            "type": "slider",
+            "min": 0,
+            "max": 2,
+            "value": 1
+        },
+
+        "v Off by Default (too much in my opinion) v": {
+            "type": "separator"
+        },
+        "Jetpack Boost": {
+            "type": "slider",
+            "min": 0,
+            "max": 2,
+            "value": 0
+        }
+    }
+}

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32106.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CameraShake", "CameraShake\CameraShake.csproj", "{8A39F9E7-1A89-430C-9C3E-BDFB3B7E17DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8A39F9E7-1A89-430C-9C3E-BDFB3B7E17DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A39F9E7-1A89-430C-9C3E-BDFB3B7E17DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A39F9E7-1A89-430C-9C3E-BDFB3B7E17DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A39F9E7-1A89-430C-9C3E-BDFB3B7E17DF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FE299C11-7C52-4E58-80BE-CBB2DD6C4847}
+	EndGlobalSection
+EndGlobal
