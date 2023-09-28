@@ -35,7 +35,9 @@ namespace CameraShake.BuiltInShakes
 
             //---------------- Scout ----------------//
             harmony.AddPostfix<ProbeLauncher>("LaunchProbe", t, nameof(PatchShakes.LaunchProbe));
-            //harmony.AddPostfix<ProbeLauncher>("RetrieveProbe", t, nameof(PatchShakes.RetrieveProbe));
+#if RETRIEVE_PROBE
+            harmony.AddPostfix<ProbeLauncher>("RetrieveProbe", t, nameof(PatchShakes.RetrieveProbe));
+#endif
 
             //---------------- Environment/Explosions ----------------//
             harmony.AddPostfix<IslandController>("OnSpawnSplash", t, nameof(PatchShakes.OnSpawnSplash));
@@ -65,9 +67,14 @@ namespace CameraShake.BuiltInShakes
             harmony.AddPostfix<SunSurfaceAudioController>("Update", t, nameof(PatchShakes.SunSurfaceAudioController_Update));
             harmony.AddPostfix<SupernovaEffectController>("FixedUpdate", t, nameof(PatchShakes.SupernovaEffectController_FixedUpdate));
 
-            //harmony.AddPrefix<NomaiMultiPartDoor>("Open", t, nameof(PatchShakes.NomaiMultiPartDoor_Open));
-            //harmony.AddPrefix<NomaiMultiPartDoor>("FixedUpdate", t, nameof(PatchShakes.NomaiMultiPartDoor_FixedUpdate));
-            //harmony.AddPrefix<NomaiMultiPartDoor>("Close", t, nameof(PatchShakes.NomaiMultiPartDoor_Close));
+#if NOMAI_DOOR
+            harmony.AddPrefix<NomaiMultiPartDoor>("Open", t, nameof(PatchShakes.NomaiMultiPartDoor_Open));
+            harmony.AddPrefix<NomaiMultiPartDoor>("FixedUpdate", t, nameof(PatchShakes.NomaiMultiPartDoor_FixedUpdate));
+            harmony.AddPrefix<NomaiMultiPartDoor>("Close", t, nameof(PatchShakes.NomaiMultiPartDoor_Close));
+            harmony.AddPrefix<NomaiGateway>("OpenGate", t, nameof(PatchShakes.NomaiGateway_OpenGate));
+            harmony.AddPrefix<NomaiGateway>("FixedUpdate", t, nameof(PatchShakes.NomaiGateway_FixedUpdate));
+            harmony.AddPrefix<NomaiGateway>("CloseGate", t, nameof(PatchShakes.NomaiGateway_CloseGate));
+#endif
 
             //---------------- Extras ----------------//
             harmony.AddPostfix<OWAudioMixer>("MixMemoryUplink", t, nameof(PatchShakes.MixMemoryUplink));
@@ -114,7 +121,8 @@ namespace CameraShake.BuiltInShakes
             float t = GetTakeOffIntensityAmount();
             shipStartIgnitionShake = CameraShaker.ExplosionShake(2f * ShakeSettings.Ship * t, 2f, null, 2f);
         }
-        public static void OnCancelShipIgnition(ShipThrusterAudio __instance) {
+        public static void OnCancelShipIgnition(ShipThrusterAudio __instance)
+        {
             if (shipStartIgnitionShake != null) shipStartIgnitionShake.ForceDecay(0.2f);
         }
 
@@ -146,9 +154,11 @@ namespace CameraShake.BuiltInShakes
                     t = Mathf.InverseLerp(70f, 200f, speed);
                     CameraShaker.ExplosionShake(t * 5f * ShakeSettings.Ship, 2.5f);
                     break;
-                case FluidVolume.Type.WATER: CameraShaker.ExplosionShake(t * 5f * ShakeSettings.Ship, 1.5f);
+                case FluidVolume.Type.WATER:
+                    CameraShaker.ExplosionShake(t * 5f * ShakeSettings.Ship, 1.5f);
                     break;
-                case FluidVolume.Type.CLOUD: CameraShaker.ExplosionShake(t * 5f * ShakeSettings.Ship, 2.5f, null, 4f);
+                case FluidVolume.Type.CLOUD:
+                    CameraShaker.ExplosionShake(t * 5f * ShakeSettings.Ship, 2.5f, null, 4f);
                     break;
             }
         }
@@ -173,7 +183,7 @@ namespace CameraShake.BuiltInShakes
         public static void OnShuttleLaunch(NomaiShuttleController __instance, NomaiInterfaceSlot slot)
             => CameraShaker.MediumShake(ShakeSettings.Ship * 0.6f);
 
-        public static void OnShuttleRecall(GravityCannonController __instance) 
+        public static void OnShuttleRecall(GravityCannonController __instance)
             => CameraShaker.MediumShake(ShakeSettings.Ship * 0.4f);
 
         //--------------------------------------------- Player ---------------------------------------------//
@@ -234,7 +244,9 @@ namespace CameraShake.BuiltInShakes
                 case DeathType.Supernova: CameraShaker.ExplosionShake(ShakeSettings.Explosions * 8f, 4f, null, 7f); break;
                 case DeathType.Digestion: CameraShaker.ExplosionShake(ShakeSettings.Player * 1f, 10f, null, 6f); break;
                 case DeathType.BigBang: break;
-                //case DeathType.Crushed: CameraShaker.ExplosionShake(ShakeSettings.Environment * 3f, 20f, null, 0.1f); break;
+#if CRUSHED
+                case DeathType.Crushed: CameraShaker.ExplosionShake(ShakeSettings.Environment * 3f, 20f, null, 0.1f); break;
+#endif
                 //Not the right place
                 case DeathType.Meditation: break;
                 case DeathType.TimeLoop: CameraShaker.ExplosionShake(ShakeSettings.Player * 8f, 10f, null, 0.3f); break;
@@ -251,7 +263,9 @@ namespace CameraShake.BuiltInShakes
         {
             if (!PlayerState.IsInsideShip()) CameraShaker.SubtleShake(ShakeSettings.Scout);
         }
-        //public static void RetrieveProbe(ProbeLauncher __instance) => CameraShaker.SubtleShake(ShakeSettings.Scout); //Too much
+#if RETRIEVE_PROBE
+        public static void RetrieveProbe(ProbeLauncher __instance) => CameraShaker.SubtleShake(ShakeSettings.Scout); //Too much
+#endif
 
         //--------------------------------------------- Environment ---------------------------------------------//
         public static void OnIslandEnteredTornado(IslandAudioController __instance)
@@ -284,7 +298,8 @@ namespace CameraShake.BuiltInShakes
         }
         public static void FloodImpactEffect_PlayEffects(FloodImpactEffect __instance) //Shake from Wave Damage
         {
-            if (InRingworld) {
+            if (InRingworld)
+            {
                 var pos = __instance.transform.position;
                 CameraShaker.ExplosionShake(4f * ShakeSettings.Explosions, 1f, pos, 10f, 15f, 65f);
             }
@@ -300,7 +315,7 @@ namespace CameraShake.BuiltInShakes
                 CameraShaker.ExplosionShake(13f * ShakeSettings.Explosions, 2.6f, pos, 8f, 200f, 1000f);
             }
         }
-        
+
         public static void SunExplode(RingWorldController __instance)
         {
             if (!PlayerState.InCloakingField()) CameraShaker.ExplosionShake(2.5f * ShakeSettings.Explosions, 4f, null, 3.5f);
@@ -337,13 +352,16 @@ namespace CameraShake.BuiltInShakes
                 CameraShaker.ExplosionShake(strength, 10f, pos, 0.5f, 40f, 450f);
             }
         }
-        public static void OnOpenHatch(EmergencyHatch __instance, NomaiInterfaceSlot slot) {
+        public static void OnOpenHatch(EmergencyHatch __instance, NomaiInterfaceSlot slot)
+        {
             CameraShaker.MediumShake(ShakeSettings.Ship * 0.66f);
         }
         public static void OnChangeAnglerState(AnglerfishAudioController __instance, AnglerfishController.AnglerState anglerState)
         {
-            if (anglerState == AnglerfishController.AnglerState.Chasing) {
-                if (Time.time > AnglerfishAudioController.s_lastDetectTime + 2f) {
+            if (anglerState == AnglerfishController.AnglerState.Chasing)
+            {
+                if (Time.time > AnglerfishAudioController.s_lastDetectTime + 2f)
+                {
                     CameraShaker.ExplosionShake(ShakeSettings.Environment * 7f, 1.25f, null, 10f);
                 }
             }
@@ -357,33 +375,59 @@ namespace CameraShake.BuiltInShakes
         public static void SunSurfaceAudioController_Update(SunSurfaceAudioController __instance) => AdvancedShakes.HandleSunShake(__instance);
         public static void SupernovaEffectController_FixedUpdate(SupernovaEffectController __instance) => AdvancedShakes.HandleSupernovaShake(__instance);
 
-        /*
-        static PerlinShake gateShake;
-        public static void NomaiMultiPartDoor_Open(NomaiMultiPartDoor __instance, NomaiInterfaceSlot slot) {
-            DoGateShake(__instance);
-            Log.Success("Open");
+#if NOMAI_DOOR
+        static PerlinShake doorShake;
+        public static void NomaiMultiPartDoor_Open(NomaiMultiPartDoor __instance, NomaiInterfaceSlot slot)
+        {
+            DoMultiPartDoorShake(__instance);
+            Log.Success("Open Multi-part Door");
         }
         public static void NomaiMultiPartDoor_FixedUpdate(NomaiMultiPartDoor __instance)
         {
-            if (gateShake != null) gateShake.UpdateSourcePosition(__instance.transform.position);
+            if (doorShake != null) doorShake.UpdateSourcePosition(__instance.transform.position);
         }
-        public static void NomaiMultiPartDoor_Close(NomaiMultiPartDoor __instance, NomaiInterfaceSlot slot) {
-            DoGateShake(__instance);
-        }
-        static void DoGateShake(NomaiMultiPartDoor __instance)
+        public static void NomaiMultiPartDoor_Close(NomaiMultiPartDoor __instance, NomaiInterfaceSlot slot)
         {
-            if (gateShake != null) gateShake.ForceDecay(0.5f);
+            DoMultiPartDoorShake(__instance);
+        }
+        static void DoMultiPartDoorShake(NomaiMultiPartDoor __instance)
+        {
+            if (doorShake != null) doorShake.ForceDecay(0.5f);
             bool isAirlock = __instance is NomaiAirlock;
             var pos = __instance.transform.position;
 
-            if (isAirlock) {
-                gateShake = CameraShaker.ExplosionShake(0.5f * ShakeSettings.Environment, 5f, pos, 0.5f, 3f, 15f);
+            if (isAirlock)
+            {
+                doorShake = CameraShaker.ExplosionShake(0.5f * ShakeSettings.Environment, 5f, pos, 0.5f, 3f, 15f);
             }
-            else {
-                gateShake = CameraShaker.ExplosionShake(0.5f * ShakeSettings.Environment, 6f, pos, 0.5f, 3f, 15f);
+            else
+            {
+                doorShake = CameraShaker.ExplosionShake(0.5f * ShakeSettings.Environment, 6f, pos, 0.5f, 3f, 15f);
             }
         }
-        */
+
+        static PerlinShake gateShake;
+        public static void NomaiGateway_OpenGate(NomaiGateway __instance, NomaiInterfaceSlot slot)
+        {
+            DoGateShake(__instance);
+            Log.Success("Open Gateway");
+        }
+        public static void NomaiGateway_FixedUpdate(NomaiGateway __instance)
+        {
+            if (gateShake != null) gateShake.UpdateSourcePosition(__instance.transform.position);
+        }
+        public static void NomaiGateway_CloseGate(NomaiGateway __instance, NomaiInterfaceSlot slot)
+        {
+            DoGateShake(__instance);
+        }
+        static void DoGateShake(NomaiGateway __instance)
+        {
+            if (gateShake != null) gateShake.ForceDecay(0.5f);
+            var pos = __instance.transform.position;
+
+            gateShake = CameraShaker.ExplosionShake(0.75f * ShakeSettings.Environment, 8f, pos, 0.5f, 5f, 20f);
+        }
+#endif
 
         //--------------------------------------------- Misc ---------------------------------------------//
         public static void MixMemoryUplink(OWAudioMixer __instance, float duration) => CameraShaker.ExplosionShake(1f, 8.2f, null, 2f);
@@ -400,7 +444,7 @@ namespace CameraShake.BuiltInShakes
                 case EyeState.AboardVessel: CameraShaker.ExplosionShake(6f, 3f, null, 10f); break;
                 case EyeState.IntoTheVortex: CameraShaker.ExplosionShake(1f * ShakeSettings.Environment, 2f, null, 5f); break;
 
-                    //Don't do much?
+                //Don't do much?
                 case EyeState.WarpedToSurface: CameraShaker.ExplosionShake(1f * ShakeSettings.Environment, 1f, null, 10f); break;
                 case EyeState.ZoomOut: CameraShaker.ExplosionShake(1f * ShakeSettings.Environment, 1f, null, 10f); break;
             }

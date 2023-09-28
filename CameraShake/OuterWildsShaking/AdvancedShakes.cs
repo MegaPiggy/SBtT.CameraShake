@@ -28,10 +28,11 @@ namespace CameraShake.BuiltInShakes
             if (dist <= maxDist)
             {
                 float s = strength * ShakeSettings.Explosions * __instance._audioSources[0].volume;
-                if (shake == null) {
+                if (shake == null)
+                {
                     shake = CameraShaker.ExplosionShakeConstant(s, pos, 1000f, 20f, maxDist);
                 }
-                
+
                 var d = new Displacement(Vector3.zero, PerlinShake.defaultEuler * s);
                 if (__instance._playerInTimeLoop) d.eulerAngles *= 0f;
                 if (PlayerState.IsInsideShip()) d.eulerAngles *= 0.8f;
@@ -63,7 +64,7 @@ namespace CameraShake.BuiltInShakes
             float strength = ShakeSettings.Explosions * a.volume * a.volume * 4f;
             CameraShaker.AdvancedShake(ref supernovaShake, isActive, strength);
         }
-        
+
         static PerlinShake playerBoostShake;
         static float t = 0f;
         public static void JetpackThrusterUpdate(JetpackThrusterAudio __instance)
@@ -93,7 +94,7 @@ namespace CameraShake.BuiltInShakes
         static bool finishedRiverShake;
         public static void ActivateRiverShake(RingRiverController __instance)
         {
-            if ( !(PlayerState.InCloakingField() || PlayerState.InDreamWorld()) ) return;
+            if (!(PlayerState.InCloakingField() || PlayerState.InDreamWorld())) return;
 
             finishedRiverShake = false;
             riverShake = CameraShaker.ExplosionShakeConstant(3f * ShakeSettings.Environment, WavePos, 10f, 10f, 200f);
@@ -126,7 +127,7 @@ namespace CameraShake.BuiltInShakes
                 riverShakeDreamworld = null;
             }
         }
-        
+
         static Vector3 WavePos => Locator.GetRingWorldController()._riverController._waveAudio._audioSource.transform.position;
     }
 }

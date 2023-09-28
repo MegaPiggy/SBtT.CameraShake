@@ -5,14 +5,8 @@ using UnityEngine.InputSystem;
 
 namespace CameraShake.DebugStuff
 {
-    public sealed class DebugControls
+    public sealed class DebugControls : MonoBehaviour
     {
-        private IModHelper modHelper;
-        public DebugControls(IModHelper modHelper)
-        {
-            this.modHelper = modHelper;
-        }
-
         bool GetKeyDown(Key key)
         {
             return Keyboard.current[key].wasPressedThisFrame;
@@ -21,18 +15,18 @@ namespace CameraShake.DebugStuff
         {
             return Keyboard.current[key].wasReleasedThisFrame;
         }
-        public void OnUpdate()
+        public void Update()
         {
-            if (GetKeyDown(Key.Y)) TeleportToVesselWithAdvancedWarpCore();
-            if (GetKeyDown(Key.K)) ExplodeShip();
+            if (GetKeyDown(Key.LeftBracket)) TeleportToVesselWithAdvancedWarpCore();
+            if (GetKeyDown(Key.RightBracket)) ExplodeShip();
 
             if (GetKeyDown(Key.Comma)) Rewind60Seconds();
             if (GetKeyDown(Key.Period)) SkipForward60Seconds();
 
             if (Time.timeScale > 0.5f)
             {
-                if (GetKeyDown(Key.Equals)) Time.timeScale = 20f;
-                if (GetKeyUp(Key.Equals)) Time.timeScale = 1f;
+                if (GetKeyDown(Key.Backslash)) Time.timeScale = 20f;
+                if (GetKeyUp(Key.Backslash)) Time.timeScale = 1f;
             }
             if (GetKeyDown(Key.F1))
             {
@@ -101,7 +95,7 @@ namespace CameraShake.DebugStuff
         {
             var vesselRB = GameObject.Find("DB_VesselDimension_Body").GetComponent<OWRigidbody>();
             TeleportTo(vesselRB, new Vector3(330f, -100f, 170f));
-            
+
             GivePlayerItem<WarpCoreItem>(x => x.GetWarpCoreType() == WarpCoreType.Vessel);
         }
         void ExplodeShip()

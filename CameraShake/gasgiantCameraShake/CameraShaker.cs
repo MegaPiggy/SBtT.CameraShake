@@ -119,32 +119,38 @@ namespace CameraShake
             return shake;
         }
 
-        static CameraShaker Instance;
-        readonly List<ICameraShake> activeShakes = new List<ICameraShake>();
-        Transform camTF;
+        private static CameraShaker Instance;
+        private readonly List<ICameraShake> activeShakes = new List<ICameraShake>();
+        private Transform camTF;
 
         /// <summary>
         /// <para> Add a custom shake to the list of active shakes. </para>
         /// <para> See: <see cref="BounceShake"/>, <see cref="PerlinShake"/>, <see cref="KickShake"/> </para></summary>
-        public static void CustomShake(ICameraShake shake) {
+        public static void CustomShake(ICameraShake shake)
+        {
             if (!IsInstanceNull()) Instance.RegisterShake(shake);
         }
         /// <summary>Stop a shake from the list of active shakes.</summary>
         public static void StopShake(ICameraShake shake)
         {
-            if (!IsInstanceNull()) Instance.activeShakes.Remove(shake);
+            if (!IsInstanceNull()) Instance.RemoveShake(shake);
         }
         /// <summary>Stop all active shakes.</summary>
         public static void StopAllShakes()
         {
-            if (!IsInstanceNull()) Instance.activeShakes.Clear();
+            if (!IsInstanceNull()) Instance.ClearShakes();
         }
+
+
+        /// <summary>
+        /// <para> Add a custom shake to the list of active shakes. </para>
+        /// <para> See: <see cref="BounceShake"/>, <see cref="PerlinShake"/>, <see cref="KickShake"/> </para></summary>
         void RegisterShake(ICameraShake shake)
         {
             shake.Initialize(camTF.position, camTF.rotation);
             activeShakes.Add(shake);
 
-            //Log.Print($"{shake.GetType()}");
+            Log.Print($"{shake.GetType()}");
         }
 
         /// <summary>Sets the transform which will be affected by the shakes.</summary>
@@ -155,7 +161,8 @@ namespace CameraShake
             camTF = cameraTransform;
             Instance = this;
         }
-        void Update()
+
+        private void Update()
         {
             if (camTF == null) return;
 
@@ -176,7 +183,19 @@ namespace CameraShake
             camTF.localRotation = Quaternion.Euler(ShakeSettings.Master * cameraDisplacement.eulerAngles);
         }
 
-        static bool IsInstanceNull()
+        /// <summary>Stop a shake from the list of active shakes.</summary>
+        public void RemoveShake(ICameraShake shake)
+        {
+            activeShakes.Remove(shake);
+        }
+
+        /// <summary>Stop all active shakes.</summary>
+        public void ClearShakes()
+        {
+            activeShakes.Clear();
+        }
+
+        private static bool IsInstanceNull()
         {
             if (Instance == null)
             {

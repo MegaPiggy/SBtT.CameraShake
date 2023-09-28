@@ -17,13 +17,16 @@ namespace CameraShake
         }
 
         //--------------------------------------------- Printing for testing, not final version. ---------------------------------------------//
-        public static void Print(object message) {
+        public static void Print(object message)
+        {
             if (ModMain.isDevelopmentVersion) Console.WriteLine($"{message}");
         }
-        public static void Print(string line) {
+        public static void Print(string line)
+        {
             if (ModMain.isDevelopmentVersion) Console.WriteLine(line);
         }
-        public static void Success(string line, bool showInFinal = true) {
+        public static void Success(string line, bool showInFinal = true)
+        {
             if (ModMain.isDevelopmentVersion || showInFinal) Console.WriteLine(line, MessageType.Success);
         }
         //--------------------------------------------- Warnings and Errors should show always. ---------------------------------------------//
