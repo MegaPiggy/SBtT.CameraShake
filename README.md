@@ -2,6 +2,8 @@
 This mod adds some camera shakage to various parts of the game.
 (Can also be used by other mods to add their own camera shakes?)
 
+![Camera Shake](https://raw.githubusercontent.com/MegaPiggy/SBtT.CameraShake/main/CameraShakeThumbnail.png)
+
 ## Settings
 Explosions - ship reactor, meteors/falling chunks, and a "bigger explosion."
 
