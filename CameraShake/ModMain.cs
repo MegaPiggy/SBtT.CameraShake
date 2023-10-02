@@ -39,5 +39,7 @@ namespace CameraShake
         }
 
         public override void Configure(IModConfig config) => ShakeSettings.UpdateSettings(config);
+
+        public override object GetApi() => new CameraShakerAPI();
     }
 }

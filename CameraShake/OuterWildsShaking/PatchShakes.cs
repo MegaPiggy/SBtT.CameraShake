@@ -165,7 +165,7 @@ namespace CameraShake.BuiltInShakes
         static float shipLastEnterTornadoTime;
         public static void GetPointFluidAngularVelocity(TornadoFluidVolume __instance, Vector3 worldPosition, FluidDetector detector)
         {
-            if (Time.time < shipLastEnterTornadoTime + 2f) return;
+            if (Time.time < shipLastEnterTornadoTime + 1.5f) return;
 
             if (PlayerState.IsInsideShip() && detector.CompareTag("ShipDetector"))
             {
@@ -294,14 +294,30 @@ namespace CameraShake.BuiltInShakes
         }
         public static void DamageDam(RingWorldController __instance) //Shake at end of Deploy Sails
         {
-            if (InRingworld) CameraShaker.ExplosionShake(3.5f * ShakeSettings.Environment, 6f, null, 1f);
+            if (InRingworld) CameraShaker.ExplosionShake(3.5f * ShakeSettings.Environment, 5.5f, null, 0.6f);
         }
         public static void FloodImpactEffect_PlayEffects(FloodImpactEffect __instance) //Shake from Wave Damage
         {
             if (InRingworld)
             {
-                var pos = __instance.transform.position;
-                CameraShaker.ExplosionShake(4f * ShakeSettings.Explosions, 1f, pos, 10f, 15f, 65f);
+                if (__instance._audioSource != null)
+                {
+                    var pos = __instance.transform.position;
+
+                    switch (__instance._audioType)
+                    {
+                        case AudioType.WaterSpray_Small:
+                        case AudioType.WoodImpact_Small: CameraShaker.ExplosionShake(5f * ShakeSettings.Explosions, 0.8f, pos, 10f, 20f, 150f); break;
+
+                        case AudioType.WaterSpray_Large:
+                        case AudioType.GeneralDestruction:
+                        case AudioType.StiltDestruction:
+                        case AudioType.HouseDestruction:
+                        case AudioType.WoodImpact_Large: CameraShaker.ExplosionShake(8f * ShakeSettings.Explosions, 1.2f, pos, 10f, 20f, 200f); break;
+
+                        case AudioType.HouseCollapse_Zone3: CameraShaker.ExplosionShake(6f * ShakeSettings.Explosions, 4.5f, pos, 5f, 20f, 125f); break;
+                    }
+                }
             }
         }
         static bool InRingworld => PlayerState.InCloakingField() && !PlayerState.InDreamWorld();
@@ -475,6 +491,7 @@ namespace CameraShake.BuiltInShakes
             //Far camera is under main camera, so should be shook as well
 
             shaker.Initialize(shakeTF);
+            AdvancedShakes.Initialize();
 
             Log.Success("Created Shake Root.");
         }

@@ -7,6 +7,17 @@ namespace CameraShake.BuiltInShakes
 {
     public static class AdvancedShakes
     {
+        public static void Initialize() //Supernova shake didn't reset properly on loop, so resetting all just in case.
+        {
+            shakeEmber = null;
+            shakeAsh = null;
+            sunShake = null;
+            supernovaShake = null;
+            playerBoostShake = null;
+            riverShake = null;
+            riverShakeDreamworld = null;
+        }
+
         static PerlinShake shakeEmber;
         static PerlinShake shakeAsh;
         public static void SandFunnelUpdate(SandFunnelController __instance)
@@ -61,7 +72,9 @@ namespace CameraShake.BuiltInShakes
             var a = __instance._audioSource;
             if (a == null) return;
             bool isActive = a.isPlaying && a.volume > Mathf.Epsilon;
-            float strength = ShakeSettings.Explosions * a.volume * a.volume * 4f;
+
+            float v = Mathf.Clamp01(a.volume * 2f); //Volume only goes up to 0.5?
+            float strength = ShakeSettings.Explosions * v * v * 3f;
             CameraShaker.AdvancedShake(ref supernovaShake, isActive, strength);
         }
 
